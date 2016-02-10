@@ -20,6 +20,11 @@ $(function() {
     $.get('https://api.spotify.com/v1/search?q=artist:' + artist + '&type=album', this.handle);
   }
 
+  Spotify.prototype.searchTracks = function (event) {
+    event.preventDefault();
+    var album = event.currentTarget.id;
+    $.get('https://api.spotify.com/v1/albums/' + album + '/tracks', this.handleTracks);
+  }
   
   Spotify.prototype.handle = function(response) {
     
@@ -28,7 +33,7 @@ $(function() {
       value.items.forEach(function(thing){
         if(thing.images.length !== 0){
           var image = '<img src="' + thing.images[0].url + '">'
-          var nameImage = '<li> <a>' + thing.name + '</a>' + image + '</li>'
+          var nameImage = '<li> <a id="' + thing.id + '">' + thing.name + '</a>' + image + '</li>'
         $('.' + key).append(nameImage);
         } else {
           var name = '<li>' + thing.name + '</li>' 
@@ -36,34 +41,22 @@ $(function() {
         }
       });
     }
+
+  Spotify.prototype.handleTracks = function(response) {
+    
+    response.items.forEach(function(track){
+      
+        var name = '<li> <a href="' + track.preview_url + '">' + track.name + '</li>' 
+        $('.tracks').append(name);
+      });
+    }
   }
-
-
-
-  // Spotify.prototype.handleArtists = function(response) {
-  //   response.artists.items.forEach(function(artist){
-  //     if(artist.images.length !== 0){
-  //       var image = '<img src="' + artist.images[0].url + '">'
-  //       var nameImage = '<li> <a>' + artist.name + '</a>' + image + '</li>'
-  //       $('.artists').append(nameImage);
-  //     } else {
-  //       var name = '<li>' + artist.name + '</li>' 
-  //       $('.artists').append(name);
-  //     }
-  //   });
-  // } 
-
-  // Spotify.prototype.handleAlbums = function(response) {
-  //   response.albums.items.forEach(function(album){
-  //     console.log(album.name)
-  //   });
-  // }
 
   var spoti = new Spotify();
 
   $('.search').on('click', spoti.searchArtists.bind(spoti));
   $('.artists').on('click', 'a', spoti.searchAlbums.bind(spoti));
-  // $('.albums').on('click', 'a', spoti.searchTracks.bind(spoti));
+  $('.albums').on('click', 'a', spoti.searchTracks.bind(spoti));
 
 
 });
