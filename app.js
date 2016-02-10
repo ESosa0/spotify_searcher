@@ -32,9 +32,9 @@ $(function() {
       var value = response[key]; 
       value.items.forEach(function(thing){
         if(thing.images.length !== 0){
-          var image = '<img src="' + thing.images[0].url + '">'
-          var nameImage = '<li> <a id="' + thing.id + '">' + thing.name + '</a>' + image + '</li>'
-        $('.' + key).append(nameImage);
+          var image = '<img src="' + thing.images[0].url + '">';
+          var nameImage = '<li> <a id="' + thing.id + '">' + thing.name + '</a>' + image + '</li>';
+          $('.' + key).append(nameImage);
         } else {
           var name = '<li>' + thing.name + '</li>' 
           $('.' + key).append(name);
@@ -45,7 +45,6 @@ $(function() {
   Spotify.prototype.handleTracks = function(response) {
     
     response.items.forEach(function(track){
-      
         var name = '<li> <a href="' + track.preview_url + '">' + track.name + '</li>' 
         $('.tracks').append(name);
       });
