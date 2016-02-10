@@ -15,22 +15,24 @@ $(function() {
 
   Spotify.prototype.searchAlbums = function (event) {
     event.preventDefault();
+    $('.albums').empty();
     var artist = event.currentTarget.innerText;
     $.get('https://api.spotify.com/v1/search?q=artist:' + artist + '&type=album', this.handle);
   }
 
   
   Spotify.prototype.handle = function(response) {
+    
     for(var key in response) {
       var value = response[key]; 
       value.items.forEach(function(thing){
         if(thing.images.length !== 0){
           var image = '<img src="' + thing.images[0].url + '">'
           var nameImage = '<li> <a>' + thing.name + '</a>' + image + '</li>'
-        $('.artists').append(nameImage);
+        $('.' + key).append(nameImage);
         } else {
           var name = '<li>' + thing.name + '</li>' 
-          $('.artists').append(name);
+          $('.' + key).append(name);
         }
       });
     }
@@ -61,6 +63,7 @@ $(function() {
 
   $('.search').on('click', spoti.searchArtists.bind(spoti));
   $('.artists').on('click', 'a', spoti.searchAlbums.bind(spoti));
+  // $('.albums').on('click', 'a', spoti.searchTracks.bind(spoti));
 
 
 });
